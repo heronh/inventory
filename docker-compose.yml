@@ -1,0 +1,38 @@
+services:
+  db:
+    build:
+      context: .
+      dockerfile: docker/postgres/Dockerfile
+      args:
+        POSTGRES_USER_ARG: ${DB_USER}
+        POSTGRES_PASSWORD_ARG: ${DB_PASSWORD}
+        POSTGRES_DB_ARG: ${DB_NAME}
+    image: inventory-postgres:latest
+    container_name: inventory-postgres
+    restart: unless-stopped
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: inventory-app
+    restart: unless-stopped
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - "${PORT}:8008"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  pgdata:

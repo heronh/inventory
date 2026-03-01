@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Novo Usuário</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    nav a { margin-right: 12px; }
+    .error { color: #b00020; }
+    .success { color: #0a7a22; }
+    form { max-width: 520px; }
+    input, select, button { width: 100%; padding: 8px; margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/inventory">Estoque</a>
+    <a href="/user">Meu Usuário</a>
+    <a href="/logout" onclick="return confirm('Tem certeza que deseja sair?');">Sair</a>
+  </nav>
+  <h1>Criar Usuário</h1>
+  {{if .Error}}<p class="error">{{.Error}}</p>{{end}}
+  {{if .Success}}<p class="success">{{.Success}}</p>{{end}}
+  <form method="post" action="/newuser/create">
+    <label>Nome</label>
+    <input type="text" name="name" title="Nome" required>
+    <label>Email</label>
+    <input type="email" name="email" title="Email" required>
+    <label>Senha</label>
+    <input type="password" name="password" title="Senha" required>
+    <label>Telefone</label>
+    <input type="text" name="phone" title="Telefone">
+    <label>Perfil de acesso</label>
+    <select name="privilege_id" title="Perfil de acesso" required>
+      <option value="">Selecione o perfil</option>
+      {{range .Roles}}
+      <option value="{{.ID}}">{{.Description}}</option>
+      {{end}}
+    </select>
+    <button type="submit">Criar Usuário</button>
+  </form>
+  <footer>
+    <a href="/tarefas">Tarefas</a>
+  </footer>
+</body>
+</html>

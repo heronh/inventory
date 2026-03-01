@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entradas</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    nav a { margin-right: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    form { margin-top: 14px; }
+    .row { border: 1px solid #ddd; padding: 12px; margin-top: 10px; }
+    input, select, button { width: 100%; padding: 8px; margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/inventory">Estoque</a>
+    <a href="/entries/edit">Editar Entradas</a>
+    <a href="/logout" onclick="return confirm('Tem certeza que deseja sair?');">Sair</a>
+  </nav>
+  <h1>Entradas de Estoque</h1>
+  <form method="post" action="/entries/create">
+    <div class="row">
+      <h3>Linha 1</h3>
+      <select name="product_id" title="Produto linha 1" required>
+        <option value="">Produto</option>
+        {{range .Products}}<option value="{{.ID}}">{{.Name}}</option>{{end}}
+      </select>
+      <select name="supplier_id" title="Fornecedor linha 1" required>
+        <option value="">Fornecedor</option>
+        {{range .Suppliers}}<option value="{{.ID}}">{{.Name}}</option>{{end}}
+      </select>
+      <input type="number" step="0.01" name="quantity" placeholder="Quantidade" required>
+      <input type="number" step="0.01" name="price" placeholder="Preço" required>
+      <input name="observation" placeholder="Observação">
+    </div>
+    <button type="submit">Registrar Entradas</button>
+  </form>
+
+  <h2>Entradas Recentes</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Produto</th>
+        <th>Fornecedor</th>
+        <th>Quantidade</th>
+        <th>Preço</th>
+        <th>Observação</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Entries}}
+      <tr>
+        <td><a href="/entries/edit?id={{.ID}}">{{.ID}}</a></td>
+        <td>{{.Product.Name}}</td>
+        <td>{{.Supplier.Name}}</td>
+        <td>{{printf "%.2f" .Quantity}}</td>
+        <td>{{printf "%.2f" .Price}}</td>
+        <td>{{.Observation}}</td>
+      </tr>
+      {{else}}
+      <tr><td colspan="6">Nenhuma entrada encontrada</td></tr>
+      {{end}}
+    </tbody>
+  </table>
+  <footer>
+    <a href="/tarefas">Tarefas</a>
+  </footer>
+</body>
+</html>

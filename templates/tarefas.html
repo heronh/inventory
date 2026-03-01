@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarefas</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    nav a { margin-right: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    form { margin-top: 12px; }
+    input, select, button { padding: 8px; margin-top: 6px; }
+    .w-create { width: 60%; }
+    .w-full { width: 100%; }
+    .error { color: #b00020; }
+    .success { color: #0a7a22; }
+    footer { margin-top: 20px; padding-top: 10px; border-top: 1px solid #ddd; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/inventory">Estoque</a>
+    <a href="/logout" onclick="return confirm('Tem certeza que deseja sair?');">Sair</a>
+  </nav>
+
+  <h1>Lista de Tarefas</h1>
+  {{if .Error}}<p class="error">{{.Error}}</p>{{end}}
+  {{if .Success}}<p class="success">{{.Success}}</p>{{end}}
+
+  <form method="post" action="/tarefas/create">
+    <div>
+      <label>Descrição</label><br>
+      <input class="w-create" type="text" name="description" title="Descrição" required>
+    </div>
+    <div>
+      <label>Status</label><br>
+      <select name="status" title="Status">
+        <option value="pendente">Pendente</option>
+        <option value="em andamento">Em andamento</option>
+        <option value="concluída">Concluída</option>
+      </select>
+    </div>
+    <button type="submit">Criar Tarefa</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Descrição</th>
+        <th>Status</th>
+        <th>Usuário</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Tarefas}}
+      <tr>
+        <td>{{.ID}}</td>
+        <td>{{.Description}}</td>
+        <td>{{.Status}}</td>
+        <td>{{.User.Name}}</td>
+        <td>
+          <form method="post" action="/tarefas/update">
+            <input type="hidden" name="id" value="{{.ID}}">
+            <input class="w-full" type="text" name="description" value="{{.Description}}" title="Descrição" required>
+            <select class="w-full" name="status" title="Status">
+              <option value="pendente" {{if eq .Status "pendente"}}selected{{end}}>Pendente</option>
+              <option value="em andamento" {{if eq .Status "em andamento"}}selected{{end}}>Em andamento</option>
+              <option value="concluída" {{if eq .Status "concluída"}}selected{{end}}>Concluída</option>
+            </select>
+            <button type="submit">Salvar</button>
+          </form>
+          <form method="post" action="/tarefas/delete" onsubmit="return confirm('Tem certeza que deseja excluir esta tarefa?');">
+            <input type="hidden" name="id" value="{{.ID}}">
+            <button type="submit">Excluir</button>
+          </form>
+        </td>
+      </tr>
+      {{else}}
+      <tr><td colspan="5">Nenhuma tarefa encontrada</td></tr>
+      {{end}}
+    </tbody>
+  </table>
+
+  <footer>
+    <a href="/tarefas">Tarefas</a>
+  </footer>
+</body>
+</html>

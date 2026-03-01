@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Novo Fornecedor</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    nav a { margin-right: 12px; }
+    .error { color: #b00020; }
+    .success { color: #0a7a22; }
+    form { max-width: 700px; }
+    input, button { width: 100%; padding: 8px; margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/inventory">Estoque</a>
+    <a href="/suppliers/edit">Editar Fornecedor</a>
+    <a href="/logout" onclick="return confirm('Tem certeza que deseja sair?');">Sair</a>
+  </nav>
+  <h1>Novo Fornecedor</h1>
+  {{if .Error}}<p class="error">{{.Error}}</p>{{end}}
+  {{if .Success}}<p class="success">{{.Success}}</p>{{end}}
+  <form method="post" action="/suppliers/create">
+    <input name="name" placeholder="Nome" required>
+    <input name="trade_name" placeholder="Nome Fantasia">
+    <input name="tax_id" placeholder="CNPJ">
+    <input name="zip_code" placeholder="CEP">
+    <input name="street" placeholder="Rua">
+    <input name="number" placeholder="Número">
+    <input name="complement" placeholder="Complemento">
+    <input name="neighborhood" placeholder="Bairro">
+    <input name="city" placeholder="Cidade">
+    <input name="state" placeholder="Estado">
+    <button type="submit">Criar Fornecedor</button>
+  </form>
+  <footer>
+    <a href="/tarefas">Tarefas</a>
+  </footer>
+</body>
+</html>

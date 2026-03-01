@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estoque</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    nav a { margin-right: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/inventory">Estoque</a>
+    <a href="/products/new">Novo Produto</a>
+    <a href="/products/edit">Editar Produto</a>
+    <a href="/clients/new">Novo Cliente</a>
+    <a href="/suppliers/new">Novo Fornecedor</a>
+    <a href="/entries">Entradas</a>
+    <a href="/sales">Vendas</a>
+    <a href="/user">Meu Usuário</a>
+    <a href="/newuser">Novo Usuário</a>
+    <a href="/logout" onclick="return confirm('Tem certeza que deseja sair?');">Sair</a>
+  </nav>
+  <h1>Produtos em Estoque</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Código</th>
+        <th>Unidade</th>
+        <th>Preço</th>
+        <th>Quantidade</th>
+        <th>Estoque Mínimo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Products}}
+      <tr>
+        <td>{{.Name}}</td>
+        <td>{{.Description}}</td>
+        <td>{{.Code}}</td>
+        <td>{{.Unit}}</td>
+        <td>{{printf "%.2f" .Price}}</td>
+        <td>{{printf "%.2f" .Quantity}}</td>
+        <td>{{printf "%.2f" .MinimumStock}}</td>
+      </tr>
+      {{else}}
+      <tr><td colspan="7">Nenhum produto cadastrado</td></tr>
+      {{end}}
+    </tbody>
+  </table>
+  <footer>
+    <a href="/tarefas">Tarefas</a>
+  </footer>
+</body>
+</html>

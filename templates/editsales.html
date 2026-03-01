@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Vendas</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    nav a { margin-right: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    input, button, select { width: 100%; padding: 8px; margin-top: 6px; }
+    form { margin-top: 14px; max-width: 700px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/inventory">Estoque</a>
+    <a href="/sales">Vendas</a>
+    <a href="/logout" onclick="return confirm('Tem certeza que deseja sair?');">Sair</a>
+  </nav>
+  <h1>Editar Vendas</h1>
+  <form method="get" action="/sales/edit">
+    <label>Selecione a venda</label>
+    <select name="id" title="Selecione a venda" onchange="this.form.submit()">
+      <option value="">Escolha a venda</option>
+      {{range .Sales}}
+      <option value="{{.ID}}">#{{.ID}} - {{.Product.Name}} / {{printf "%.2f" .Quantity}}</option>
+      {{end}}
+    </select>
+  </form>
+  {{if .Sale}}
+  <form method="post" action="/sales/update">
+    <input type="hidden" name="id" value="{{.Sale.ID}}">
+    <label>Produto</label>
+    <input value="{{.Sale.Product.Name}}" title="Produto" disabled>
+    <label>Cliente</label>
+    <input value="{{.Sale.Client.Name}}" title="Cliente" disabled>
+    <label>Quantidade</label>
+    <input type="number" step="0.01" name="quantity" title="Quantidade" value="{{printf "%.2f" .Sale.Quantity}}" required>
+    <label>Preço</label>
+    <input type="number" step="0.01" name="price" title="Preço" value="{{printf "%.2f" .Sale.Price}}" required>
+    <label>Observação</label>
+    <input name="observation" title="Observação" value="{{.Sale.Observation}}">
+    <button type="submit">Atualizar Venda</button>
+  </form>
+  {{end}}
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Produto</th>
+        <th>Cliente</th>
+        <th>Quantidade</th>
+        <th>Preço</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Sales}}
+      <tr>
+        <td><a href="/sales/edit?id={{.ID}}">{{.ID}}</a></td>
+        <td>{{.Product.Name}}</td>
+        <td>{{.Client.Name}}</td>
+        <td>{{printf "%.2f" .Quantity}}</td>
+        <td>{{printf "%.2f" .Price}}</td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  <footer>
+    <a href="/tarefas">Tarefas</a>
+  </footer>
+</body>
+</html>
