@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net"
+	"net/url"
 	"os/exec"
 	"time"
 
@@ -21,6 +22,10 @@ func Connect(cfg *config.Config) (*gorm.DB, error) {
 }
 
 func EnsureDatabaseContainer(ctx context.Context, cfg *config.Config) error {
+	if cfg.DisableDBBootstrap {
+		return nil
+	}
+
 	if checkTCP(cfg.Host, cfg.DBPort) && checkSQL(cfg) {
 		return nil
 	}
@@ -90,12 +95,14 @@ func checkSQL(cfg *config.Config) bool {
 }
 
 func dsn(cfg *config.Config) string {
+	password := url.QueryEscape(cfg.DBPassword)
 	return fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		"postgres://%s:%s@%s:%s/%s?sslmode=%s",
+		cfg.DBUser,
+		password,
 		cfg.Host,
 		cfg.DBPort,
-		cfg.DBUser,
-		cfg.DBPassword,
 		cfg.DBName,
+		cfg.DBSSLMode,
 	)
 }
