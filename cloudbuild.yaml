@@ -1,0 +1,40 @@
+steps:
+# Step 1: Build the Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - 'build'
+    - '-t'
+    - 'REGION-docker.pkg.dev/$PROJECT_ID/my-go-repo/my-go-app:$COMMIT_SHA'
+    - '.'
+    - '-f'
+    - 'Dockerfile'
+  id: 'Build Image'
+
+# Step 2: Push the Docker image to Artifact Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - 'push'
+    - 'REGION-docker.pkg.dev/$PROJECT_ID/my-go-repo/my-go-app:$COMMIT_SHA'
+  id: 'Push Image'
+
+# Step 3: Deploy the image to Cloud Run
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+    - 'run'
+    - 'deploy'
+    - 'my-go-service' # Your desired Cloud Run service name
+    - '--image'
+    - 'REGION-docker.pkg.dev/$PROJECT_ID/my-go-repo/my-go-app:$COMMIT_SHA'
+    - '--region'
+    - 'REGION' # The region where you want to deploy your Cloud Run service (e.g., southamerica-east1)
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated' # Optional: Allows unauthenticated access
+    - '--set-env-vars=CURRENT_TIME=$(date +%Y-%m-%d_%H-%M-%S)' # Example environment variable
+  id: 'Deploy to Cloud Run'
+
+images:
+- 'REGION-docker.pkg.dev/$PROJECT_ID/my-go-repo/my-go-app:$COMMIT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY # Add this line
