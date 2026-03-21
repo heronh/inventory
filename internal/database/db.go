@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"fmt"
 	"net"
-	"net/url"
 	"os/exec"
 	"time"
 
@@ -26,7 +25,7 @@ func EnsureDatabaseContainer(ctx context.Context, cfg *config.Config) error {
 		return nil
 	}
 
-	if checkTCP(cfg.Host, cfg.DBPort) && checkSQL(cfg) {
+	if checkTCP(cfg.DBHost, cfg.DBPort) && checkSQL(cfg) {
 		return nil
 	}
 
@@ -46,7 +45,7 @@ func EnsureDatabaseContainer(ctx context.Context, cfg *config.Config) error {
 		case <-timeout.C:
 			return fmt.Errorf("database did not become reachable in time")
 		case <-ticker.C:
-			if checkTCP(cfg.Host, cfg.DBPort) && checkSQL(cfg) {
+			if checkTCP(cfg.DBHost, cfg.DBPort) && checkSQL(cfg) {
 				return nil
 			}
 		}
@@ -95,13 +94,12 @@ func checkSQL(cfg *config.Config) bool {
 }
 
 func dsn(cfg *config.Config) string {
-	password := url.QueryEscape(cfg.DBPassword)
 	return fmt.Sprintf(
-		"postgres://%s:%s@%s:%s/%s?sslmode=%s",
-		cfg.DBUser,
-		password,
-		cfg.Host,
+		"host=%s port=%s user=%s password='%s' dbname=%s sslmode=%s",
+		cfg.DBHost,
 		cfg.DBPort,
+		cfg.DBUser,
+		cfg.DBPassword,
 		cfg.DBName,
 		cfg.DBSSLMode,
 	)
