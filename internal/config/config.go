@@ -29,7 +29,7 @@ func Load() (*Config, error) {
 	_ = godotenv.Load()
 
 	cfg := &Config{
-		Port:               getEnv("PORT", "8008"),
+		Port:               getEnv("PORT", "8080"),
 		DBHost:             getEnv("DB_HOST", "localhost"),
 		DBPort:             getEnv("DB_PORT", "5432"),
 		DBUser:             getEnv("DB_USER", "postgres"),

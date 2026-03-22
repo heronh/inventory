@@ -16,5 +16,5 @@ COPY --from=builder /app/.env /app/.env
 COPY --from=builder /app/docker-compose.yml /app/docker-compose.yml
 COPY --from=builder /app/docker /app/docker
 
-EXPOSE 8008
+EXPOSE 8080
 CMD ["/app/inventory"]
