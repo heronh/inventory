@@ -96,16 +96,15 @@ Execute o comando de deploy. *(Substitua `[PROJECT_ID]` pelo seu ID e utilize o 
 
 ```bash
 gcloud run deploy inventory-service \
-    --image southamerica-east1-docker.pkg.dev/inventory-488915/inventory-repo/inventory-app:latest \
+    --image southamerica-east1-docker.pkg.dev/inventory-beautybrasil/inventory-repo/inventory-app:latest \
     --region southamerica-east1 \
     --allow-unauthenticated \
     --set-env-vars "DISABLE_DB_BOOTSTRAP=true" \
-    --set-env-vars "DB_HOST=/cloudsql/inventory-488915:southamerica-east1:inventory-db-instance" \
+    --set-env-vars "DB_HOST=/cloudsql/inventory-beautybrasil:southamerica-east1:inventory-db-instance" \
     --set-env-vars "DB_USER=postgres" \
     --set-env-vars 'DB_PASSWORD=ZP"z=+"I9X_(Qvj8' \
     --set-env-vars "DB_NAME=inventorydb" \
-    --set-env-vars 'SECRET_KEY=hhheew566#4SW2!HJHgr' \
-    --add-cloudsql-instances inventory-488915:southamerica-east1:inventory-db-instance
+    --add-cloudsql-instances inventory-beautybrasil:southamerica-east1:inventory-db-instance
 ```
 
 > **Atenção:** Em ambientes de produção do Google Cloud usando a biblioteca `net/http` ou via GORM, o `DB_HOST` pode precisar da sintaxe em forma de unix socket se acessado via Cloud SQL Connector, por exemplo: `host=/cloudsql/PROJECT_ID:REGION:INSTANCE_ID`. No seu código, garanta que essa variável passe sem problemas diretamente para a string de conexão (DSN) do GORM.
