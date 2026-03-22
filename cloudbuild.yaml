@@ -4,7 +4,7 @@ steps:
   args:
     - 'build'
     - '-t'
-    - 'REGION-docker.pkg.dev/$PROJECT_ID/my-go-repo/my-go-app:$COMMIT_SHA'
+    - 'southamerica-east1-docker.pkg.dev/$PROJECT_ID/inventory-repo/my-go-app:$COMMIT_SHA' # Changed my-go-repo to inventory-repo
     - '.'
     - '-f'
     - 'Dockerfile'
@@ -14,7 +14,7 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args:
     - 'push'
-    - 'REGION-docker.pkg.dev/$PROJECT_ID/my-go-repo/my-go-app:$COMMIT_SHA'
+    - 'southamerica-east1-docker.pkg.dev/$PROJECT_ID/inventory-repo/my-go-app:$COMMIT_SHA' # Changed my-go-repo to inventory-repo
   id: 'Push Image'
 
 # Step 3: Deploy the image to Cloud Run
@@ -24,9 +24,9 @@ steps:
     - 'deploy'
     - 'my-go-service' # Your desired Cloud Run service name
     - '--image'
-    - 'REGION-docker.pkg.dev/$PROJECT_ID/my-go-repo/my-go-app:$COMMIT_SHA'
+    - 'southamerica-east1-docker.pkg.dev/$PROJECT_ID/inventory-repo/my-go-app:$COMMIT_SHA' # Changed my-go-repo to inventory-repo
     - '--region'
-    - 'REGION' # The region where you want to deploy your Cloud Run service (e.g., southamerica-east1)
+    - 'southamerica-east1' # Ensure this is your correct region
     - '--platform'
     - 'managed'
     - '--allow-unauthenticated' # Optional: Allows unauthenticated access
@@ -34,7 +34,7 @@ steps:
   id: 'Deploy to Cloud Run'
 
 images:
-- 'REGION-docker.pkg.dev/$PROJECT_ID/my-go-repo/my-go-app:$COMMIT_SHA'
+- 'southamerica-east1-docker.pkg.dev/$PROJECT_ID/inventory-repo/my-go-app:$COMMIT_SHA' # Changed my-go-repo to inventory-repo
 
 options:
-  logging: CLOUD_LOGGING_ONLY # THIS LINE IS ABSOLUTELY CRUCIAL
+  logging: CLOUD_LOGGING_ONLY
