@@ -37,4 +37,4 @@ images:
 - 'REGION-docker.pkg.dev/$PROJECT_ID/my-go-repo/my-go-app:$COMMIT_SHA'
 
 options:
-  logging: CLOUD_LOGGING_ONLY # THIS LINE IS CRUCIAL
+  logging: CLOUD_LOGGING_ONLY # THIS LINE IS ABSOLUTELY CRUCIAL
